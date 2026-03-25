@@ -7,9 +7,9 @@ RUN apt-get update && apt-get install -y \
     unzip \
     && docker-php-ext-install pdo pdo_mysql zip
 
-# Bật module rewrite và cấu hình AllowOverride All để nhận diện .htaccess
+# Bật module rewrite và cấu hình AllowOverride All cho toàn bộ thư mục web
 RUN a2enmod rewrite
-RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
+RUN sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
 
 # Copy Composer từ image chính thức
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -19,9 +19,6 @@ WORKDIR /var/www/html
 
 # Copy toàn bộ code vào container
 COPY . .
-
-# Sửa lại RewriteBase trong .htaccess cho phù hợp với môi trường Render
-RUN if [ -f .htaccess ]; then sed -i 's/RewriteBase \/webbanhang\//RewriteBase \//g' .htaccess; fi
 
 # Cài đặt các thư viện PHP
 RUN composer install --no-interaction --optimize-autoloader
