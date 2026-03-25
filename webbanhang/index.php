@@ -1,11 +1,4 @@
 <?php
-// DEBUG RENDER
-if (isset($_GET['debug'])) {
-    echo "CWD: " . getcwd() . "<br>";
-    echo "FILES: " . implode(", ", scandir('.')) . "<br>";
-    echo "URL: " . (isset($_GET['url']) ? $_GET['url'] : 'EMPTY') . "<br>";
-    die();
-}
 // Hiển thị lỗi để dễ debug
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
