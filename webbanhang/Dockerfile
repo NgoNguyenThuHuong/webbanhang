@@ -26,18 +26,10 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Thiết lập thư mục làm việc
 WORKDIR /var/www/html
 
-# Copy toàn bộ code vào container
+# Copy toàn bộ code (đã bao gồm file .htaccess chuẩn) vào container
 COPY . .
 
-# Tự động tạo file .htaccess chuẩn để tránh lỗi vị trí trên GitHub
-RUN echo 'RewriteEngine On\n\
-\n\
-RewriteCond %{REQUEST_FILENAME} !-f\n\
-RewriteCond %{REQUEST_FILENAME} !-d\n\
-\n\
-RewriteRule ^(.*)$ index.php?url=\$1 [QSA,L]' > .htaccess
-
-# Cài đặt các thư viện PHP từ thư mục hiện tại
+# Cài đặt các thư viện PHP
 RUN composer install --no-interaction --optimize-autoloader
 
 # Phân quyền cho Apache
